@@ -7,11 +7,11 @@ block content
       a(class="brand",href="#")超凡咖啡工坊 会员系统
       -if(isAdmin == true)
         a(class="brand",href="/m")管理
-  header(class="jumbotron subhead",style="background-color:white")
+  div(class="container",style="background-color:white")
     <!-- 欢迎信息 -->
     header(class="hero-unit",style="background-color: darkorange;")
       div(class="row")
-        div(class="span8")
+        div(class="span7")
           h1 Hello,#{userList[0].name}！ 
           p(class="lead") 很高兴您能成为超凡咖啡工坊的会员
           br
@@ -41,7 +41,7 @@ block content
                         input(type="hidden",name="userId",value="#{userList[0].id}")
                         input(type="hidden",name="type",value="create")
                         input(type="submit",class="btn") 提交
-        div(class="span1") 
+        div(class="span2") 
           canvas(id="qrcode",width="220px",height="220px")
     <!-- tab页对应的内容 -->
     div
