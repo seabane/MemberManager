@@ -1,0 +1,73 @@
+extends layout
+
+block content
+  <!-- 悬浮导航-->
+  div(class="navbar navbar-static-top")
+    div(class="navbar-inner")
+      a(class="brand",href="#")超凡咖啡工坊 会员系统
+      -if(isAdmin == true)
+        a(class="brand",href="/m")管理
+  header(class="jumbotron subhead",style="background-color:white")
+    <!-- 欢迎信息 -->
+    header(class="hero-unit",style="background-color: darkorange;")
+      div(class="row")
+        div(class="span8")
+          h1 Hello,#{userList[0].name}！ 
+          p(class="lead") 很高兴您能成为超凡咖啡工坊的会员
+          br
+          h2(style="color:white;font-size:35pt;")
+            em 余额：#{userList[0].balance}
+          -if(isAdmin == true)
+            <!-- 消费处理，仅管理员可见 -->
+            div(class="accordion span4")
+              div(class="accordion-group well well-small")
+                div(class="accordion-heading")
+                  a(class="accordion-toggle",data-toggle="collapse",data-parent="#accordion2",href="#collapseOne") 消费处理
+                div(id="collapseOne",class="accordion-body collapse")
+                  div(id="transaction",class="accordion-inner")
+                    form(action="/l",class=".form-horizontal")
+                      fieldset
+                        div(class="control-group")
+                          div(class="controls")
+                            select(class="span3",name="inorout")
+                              option(value="in") 存款
+                              option(value="out") 消费
+                        div(class="control-group")
+                          div(class="controls")
+                            input(name="money",type="text",class="span3",placeholder="输入金额")
+                        div(class="control-group")
+                          div(class="controls")
+                            textarea(name="detail",rows=10,placeholder="输入说明内容")
+                        input(type="hidden",name="userId",value="#{userList[0].id}")
+                        input(type="hidden",name="type",value="create")
+                        input(type="submit",class="btn") 提交
+        div(class="span1") 
+          canvas(id="qrcode",width="220px",height="220px")
+    <!-- tab页对应的内容 -->
+    div
+      table(class="table table-striped table-hover")
+        thead
+          tr 
+            th 日期
+            th 存入/消费
+            th 金额
+            th 余额
+            th 说明
+        tbody
+          for log in logList
+            tr
+              td= moment(log.date).format("YYYY-MM-DD HH:mm:ss")
+              td= log.inorout == "in" ? "存入" : "消费"
+              td= log.money
+              td= log.balance
+              td= log.detail
+        
+  script
+    //二维码生成
+    var qrcodedraw = new QRCodeLib.QRCodeDraw();
+    qrcodedraw.draw(document.getElementById('qrcode'),window.location.href, function(error,canvas){
+      if(error){
+        return console.log('Error =( ',error);
+      }
+      console.log('[draw qrcode]success!');
+    });

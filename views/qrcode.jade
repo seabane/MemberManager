@@ -1,0 +1,29 @@
+extends layout
+
+block content
+  canvas(id="qrcode",width="220px",height="220px",style="display:none;")
+  img(id="canvasImg",alt="Right click to save me!")
+  script
+    //二维码生成
+    var qrcodedraw = new QRCodeLib.QRCodeDraw();
+    qrcodedraw.draw(document.getElementById('qrcode'),"#{url}", function(error,canvas){
+      if(error){
+        return console.log('Error =( ',error);
+      }
+      console.log('[draw qrcode]success!');
+      
+      //add text
+      var canvas = document.getElementById("qrcode");
+      var context = canvas.getContext("2d");
+      context.fillStyle = "orange";
+      context.font = "bold 13px Arial";
+      context.fillText("超凡咖啡工坊vip  #{name}", 20, 215);
+      
+      // save canvas image as data url (png format by default)
+      var dataURL = canvas.toDataURL();
+
+      // set canvasImg image src to dataURL
+      // so it can be saved as an image
+      document.getElementById('canvasImg').src = dataURL;
+
+    });
